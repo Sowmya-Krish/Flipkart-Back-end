@@ -2,26 +2,31 @@ import express from "express";
 import Connection from "./database/db.js";
 import DefaultData from "./default.js";
 import dotenv from "dotenv";
-import Router from "./routes/route.js";
+import Routes from "./routes/route.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { v4 as uuid } from "uuid";
 
 dotenv.config();
 const app = express();
-app.use(cors());
+app.get('/', (req, res) => {
+  res.send('Welcome to my app!');
+})
+
+const PORT = process.env.PORT || 4000;
+const URL = process.env.MONGODB_URI;
+Connection(URL);
+DefaultData();
+
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/", Router);
+app.use(cors());
+app.use("/", Routes);
+app.get("/config/paypal",(req,res)=>{
+  res.send(process.env.PAYPAL_CLIENT_ID);
+})
 
-const PORT = 8000;
 
-const username = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
-
-Connection(username, password);
-
-DefaultData();
 
 app.listen(PORT, () =>
   console.log(`Server is running successfully on PORT ${PORT}`)

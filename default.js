@@ -6,7 +6,8 @@ const DefaultData = async () => {
     //await Product.deleteMany({}); //restrict duplicates
     // console.log(products);
     // console.log("hello")
-    await Product.insertMany(products);
+        const data = await Product.insertMany(products);
+        console.log(data);
     //const data = await Product.find();
     console.log("Data imported Successfully");
   } catch (error) {
